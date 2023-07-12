@@ -9,6 +9,7 @@ export const dataSourceOptions: DataSourceOptions = {
   database: 'postgres-playground',
   entities: ['dist/**/*.entity{.ts,.js}'],
   migrations: ['dist/db/migrations/*.js'],
+  synchronize: true,
 };
 
 const dataSource = new DataSource(dataSourceOptions);

@@ -1,3 +1,5 @@
 export class CreateUserDto {
-  name: string;
+  email: string;
+  firstname: string;
+  lastname: string;
 }

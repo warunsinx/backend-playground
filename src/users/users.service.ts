@@ -4,20 +4,30 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from './entities/user.entity';
+import { Profile } from './entities/profile.entity';
 
 @Injectable()
 export class UsersService {
   constructor(
     @InjectRepository(User) private usersRepository: Repository<User>,
+    @InjectRepository(Profile) private profilesRepository: Repository<Profile>,
   ) {}
 
-  create(createUserDto: CreateUserDto) {
-    const newUser = this.usersRepository.create(createUserDto);
+  async create(createUserDto: CreateUserDto) {
+    const newProfile = this.profilesRepository.create({
+      firstname: createUserDto.firstname,
+      lastname: createUserDto.lastname,
+    });
+    await this.profilesRepository.save(newProfile);
+    const newUser = this.usersRepository.create({
+      email: createUserDto.email,
+      profile: newProfile,
+    });
     return this.usersRepository.save(newUser);
   }
 
   findAll() {
-    return this.usersRepository.find();
+    return this.usersRepository.find({ relations: { profile: true } });
   }
 
   findOne(id: number) {
@@ -25,9 +35,9 @@ export class UsersService {
   }
 
   async update(id: number, updateUserDto: UpdateUserDto) {
-    const user = await this.findOne(id);
-    const updatedUser = this.usersRepository.merge(user, updateUserDto);
-    return this.usersRepository.save(updatedUser);
+    const profile = await this.profilesRepository.findOneBy({ user: { id } });
+    const updateProfile = this.profilesRepository.merge(profile, updateUserDto);
+    return this.profilesRepository.save(updateProfile);
   }
 
   async remove(id: number) {
