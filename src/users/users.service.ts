@@ -27,15 +27,19 @@ export class UsersService {
   }
 
   findAll() {
-    return this.usersRepository.find({ relations: { profile: true } });
+    return this.usersRepository.find();
   }
 
   findOne(id: number) {
-    return this.usersRepository.findOneBy({ id });
+    return this.usersRepository.findOne({
+      where: { id },
+    });
   }
 
   async update(id: number, updateUserDto: UpdateUserDto) {
-    const profile = await this.profilesRepository.findOneBy({ user: { id } });
+    const profile = await this.profilesRepository.findOne({
+      where: { user: { id } },
+    });
     const updateProfile = this.profilesRepository.merge(profile, updateUserDto);
     return this.profilesRepository.save(updateProfile);
   }

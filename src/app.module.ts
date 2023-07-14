@@ -10,9 +10,21 @@ import { Profile } from './users/entities/profile.entity';
 import { Post } from './posts/entities/post.entity';
 import { Comment } from './posts/entities/comment.entity';
 import { Tag } from './posts/entities/tag.entity';
+import { GraphQLModule } from '@nestjs/graphql';
+import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
+import { join } from 'path';
+import { ApolloServerPluginLandingPageLocalDefault } from '@apollo/server/plugin/landingPage/default';
 
 @Module({
   imports: [
+    GraphQLModule.forRoot<ApolloDriverConfig>({
+      driver: ApolloDriver,
+      autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
+      include: [UsersModule, PostsModule],
+      sortSchema: true,
+      playground: false,
+      plugins: [ApolloServerPluginLandingPageLocalDefault()],
+    }),
     TypeOrmModule.forRoot(dataSourceOptions),
     UsersModule,
     PostsModule,

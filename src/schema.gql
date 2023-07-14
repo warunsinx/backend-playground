@@ -1,0 +1,61 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type Comment {
+  content: String!
+  id: Int!
+  post: Post!
+  user: User!
+}
+
+input CreateUserDto {
+  email: String!
+  firstname: String!
+  lastname: String!
+}
+
+type Mutation {
+  createUser(createUserInput: CreateUserDto!): User!
+  removeUser(id: Int!): User!
+  updateProfile(id: Int!, updateUserInput: UpdateUserDto!): Profile!
+}
+
+type Post {
+  comments: [User!]
+  content: String!
+  id: Int!
+  tags: [Tag!]!
+  user: User!
+}
+
+type Profile {
+  firstname: String!
+  id: Int!
+  lastname: String!
+  user: User!
+}
+
+type Query {
+  user(id: Int!): User!
+  users: [User!]!
+}
+
+type Tag {
+  id: Int!
+  name: String!
+  posts: [Post!]!
+}
+
+input UpdateUserDto {
+  firstname: String!
+  lastname: String!
+}
+
+type User {
+  comments: [Comment!]
+  email: String!
+  id: Int!
+  posts: [Post!]
+  profile: Profile!
+}

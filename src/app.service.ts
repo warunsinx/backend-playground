@@ -17,7 +17,7 @@ export class AppService {
     @InjectRepository(Tag) private tagsRepository: Repository<Tag>,
   ) {}
 
-  async seed() {
+  async seed(): Promise<string> {
     const profile = this.profilesRepository.create({
       firstname: 'John',
       lastname: 'Doe',

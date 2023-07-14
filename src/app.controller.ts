@@ -11,7 +11,7 @@ export class AppController {
   }
 
   @Get('seed')
-  seed(): Promise<string> {
+  seed() {
     return this.appService.seed();
   }
 }
