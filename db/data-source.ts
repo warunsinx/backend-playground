@@ -1,16 +1,7 @@
+import configuration from 'config/configuration';
 import { DataSource, DataSourceOptions } from 'typeorm';
 
-export const dataSourceOptions: DataSourceOptions = {
-  type: 'postgres',
-  host: 'localhost',
-  port: 5432,
-  username: 'postgres',
-  password: 'postgres',
-  database: 'postgres-playground',
-  entities: ['dist/**/*.entity{.ts,.js}'],
-  migrations: ['dist/db/migrations/*.js'],
-  synchronize: true,
-};
+export const dataSourceOptions: DataSourceOptions = configuration().database;
 
 const dataSource = new DataSource(dataSourceOptions);
 export default dataSource;
