@@ -5,25 +5,30 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from './entities/user.entity';
 import { Profile } from './entities/profile.entity';
+import { Queue } from 'bull';
+import { InjectQueue } from '@nestjs/bull';
+import { ExceptionsHandler } from '@nestjs/core/exceptions/exceptions-handler';
 
 @Injectable()
 export class UsersService {
   constructor(
     @InjectRepository(User) private usersRepository: Repository<User>,
     @InjectRepository(Profile) private profilesRepository: Repository<Profile>,
+    @InjectQueue('testQueue') private testQueue: Queue,
   ) {}
 
   async create(createUserDto: CreateUserDto) {
-    const newProfile = this.profilesRepository.create({
-      firstname: createUserDto.firstname,
-      lastname: createUserDto.lastname,
-    });
-    await this.profilesRepository.save(newProfile);
-    const newUser = this.usersRepository.create({
-      email: createUserDto.email,
-      profile: newProfile,
-    });
-    return this.usersRepository.save(newUser);
+    try {
+      const job = await this.testQueue.add('saveUserToDB', createUserDto, {
+        // removeOnComplete: true,
+        delay: 5000,
+      });
+      const result = await job.finished();
+      return result;
+    } catch (err) {
+      console.log(err);
+      throw new ExceptionsHandler(err);
+    }
   }
 
   findAll() {
