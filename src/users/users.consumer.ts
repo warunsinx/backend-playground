@@ -23,7 +23,7 @@ export class UserConsumer {
   async saveUserToDB(job: Job<CreateUserDto>) {
     try {
       const newProfile = this.profilesRepository.create({
-        firstname: job.data.email,
+        firstname: job.data.firstname,
         lastname: job.data.lastname,
       });
       await this.profilesRepository.save(newProfile);
@@ -38,16 +38,16 @@ export class UserConsumer {
     }
   }
 
-  @OnGlobalQueueCompleted()
-  async onGlobalCompleted(jobId: number, result: any) {
-    const job = await this.testQueue.getJob(jobId);
-    console.log(
-      '(Global) on completed: job ',
-      job.id,
-      ' -> result: ',
-      result,
-      ' - ',
-      new Date().toLocaleString(),
-    );
-  }
+  // @OnGlobalQueueCompleted()
+  // async onGlobalCompleted(jobId: number, result: any) {
+  //   const job = await this.testQueue.getJob(jobId);
+  //   console.log(
+  //     '(Global) on completed: job ',
+  //     job.id,
+  //     ' -> result: ',
+  //     result,
+  //     ' - ',
+  //     new Date().toLocaleString(),
+  //   );
+  // }
 }

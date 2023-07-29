@@ -21,7 +21,7 @@ export class UsersService {
     try {
       const job = await this.testQueue.add('saveUserToDB', createUserDto, {
         // removeOnComplete: true,
-        delay: 5000,
+        delay: 0,
       });
       const result = await job.finished();
       return result;

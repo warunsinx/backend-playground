@@ -7,8 +7,8 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Profile } from './profile.entity';
-import { Post } from 'src/posts/entities/post.entity';
-import { Comment } from 'src/posts/entities/comment.entity';
+import { Post } from '../../posts/entities/post.entity';
+import { Comment } from '../../posts/entities/comment.entity';
 import { Field, Int, ObjectType } from '@nestjs/graphql';
 
 @Entity()
